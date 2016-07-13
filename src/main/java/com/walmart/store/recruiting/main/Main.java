@@ -12,7 +12,7 @@ public class Main {
 	        TicketService ticketService = new TicketServiceImpl();
 	        System.out.println("Total Available level 1 seat: " + ticketService.numSeatsAvailable(Optional.of(1)));
 	        System.out.println("Total Available level 2 seat: " + ticketService.numSeatsAvailable(Optional.of(2)));
-	        SeatHold seatHold = ticketService.findAndHoldSeats(100, Optional.of(1), Optional.of(1));
+	        Optional<SeatHold> seatHold = ticketService.findAndHoldSeats(100, Optional.of(1), Optional.of(1));
 	        System.out.println("Total Available level 1 seat: " + ticketService.numSeatsAvailable(Optional.of(1)));
 	        //email param is irrelevant here
 	        ticketService.reserveSeats(seatHold.getSeatHoldId());

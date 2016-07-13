@@ -35,24 +35,24 @@ public class TicketServiceImplTest {
         assertEquals(1, hold.get().getNumSeats());
         assertEquals(9, ticketService.numSeatsAvailable(venueLevel));
 
-        hold = ticketService.findAndHoldSeats(5);
+        hold = ticketService.findAndHoldSeats(100, Optional.of(1), Optional.of(1));
         assertTrue(hold.isPresent());
-        assertNotNull(hold.get().getId());
+        assertNotNull(hold.get().getSeatHoldId());
         assertEquals(5, hold.get().getNumSeats());
-        assertEquals(4, ticketService.numSeatsAvailable());
+        assertEquals(4, ticketService.numSeatsAvailable(venueLevel));
     }
 
     @Test
     public void testReserveSeats() {
-        Optional<SeatHoldImpl> hold = ticketService.findAndHoldSeats(5);
+        Optional<SeatHold> hold = ticketService.findAndHoldSeats(100, Optional.of(1), Optional.of(1));
         assertTrue(hold.isPresent());
-        assertNotNull(hold.get().getId());
+        assertNotNull(hold.get().getSeatHoldId());
         assertEquals(5, hold.get().getNumSeats());
-        assertEquals(5, ticketService.numSeatsAvailable());
+        assertEquals(5, ticketService.numSeatsAvailable(venueLevel));
 
         Optional<String> reservationId = ticketService.reserveSeats(hold.get().getId());
         assertTrue(reservationId.isPresent());
-        assertEquals(hold.get().getId(), reservationId.get());
+        assertEquals(hold.get().getSeatHoldId(), reservationId.get());
     }
 
     @Test
@@ -63,22 +63,22 @@ public class TicketServiceImplTest {
 
     @Test
     public void testMaxSeatHold() {
-        Optional<SeatHoldImpl> hold = ticketService.findAndHoldSeats(10);
+        Optional<SeatHold> hold = ticketService.findAndHoldSeats(100, Optional.of(5), Optional.of(1));
         assertTrue(hold.isPresent());
-        assertNotNull(hold.get().getId());
+        assertNotNull(hold.get().getSeatHoldId());
         assertEquals(10, hold.get().getNumSeats());
     }
 
     @Test
     public void testEmptySeatHoldReturnedWhenRequestExceedsCapacity() {
-        Optional<SeatHoldImpl> hold = ticketService.findAndHoldSeats(11);
+        Optional<SeatHold> hold = ticketService.findAndHoldSeats(100, Optional.of(11), Optional.of(1));
         assertTrue(!hold.isPresent());
     }
 
     @Test
     public void testEmptySeatHoldReturnedWhenVenueIsFull() {
         testMaxSeatHold();
-        Optional<SeatHoldImpl> hold = ticketService.findAndHoldSeats(1);
+        Optional<SeatHold> hold = ticketService.findAndHoldSeats(100, Optional.of(16), Optional.of(1));
         assertTrue(!hold.isPresent());
     }
 
